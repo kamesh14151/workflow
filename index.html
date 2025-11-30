@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tomo - Smart Chat Assistant</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
     <style>
         * {
             margin: 0;
@@ -568,6 +569,7 @@
             try {
                 const response = await fetch(WEBHOOK_URL, {
                     method: 'POST',
+                    mode: 'cors', // Explicitly set CORS mode
                     headers: {
                         'Content-Type': 'application/json',
                     },
@@ -587,6 +589,12 @@
             } catch (error) {
                 console.error('Error sending message to webhook:', error);
                 updateConnectionStatus('disconnected');
+                
+                // Check if it's a CORS error
+                if (error.message.includes('fetch') || error.name === 'TypeError') {
+                    return "❌ CORS Error: Please configure CORS headers in your n8n workflow. Check the setup guide for details.";
+                }
+                
                 return "I'm having trouble connecting right now. Please try again later.";
             }
         }

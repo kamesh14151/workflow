@@ -1,0 +1,87 @@
+{
+  "name": "Tomo Chat Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "tomo-chat",
+        "responseMode": "responseNode"
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract message and sessionId from webhook\nconst message = $input.first().json.body.message;\nconst sessionId = $input.first().json.body.sessionId;\n\n// Here you would typically call your AI service\n// For demo purposes, we'll create a simple response\nconst responses = [\n  \"That's interesting! Tell me more.\",\n  \"I understand. How can I help you with that?\", \n  \"Thanks for sharing that with me.\",\n  \"Let me think about that... 🤔\",\n  \"That's a great question! Here's what I think...\"\n];\n\nconst randomResponse = responses[Math.floor(Math.random() * responses.length)];\n\n// Return the response\nreturn {\n  message: message,\n  sessionId: sessionId,\n  aiResponse: `${randomResponse} (Session: ${sessionId.substring(0, 8)}...)`\n};"
+      },
+      "id": "code-node",
+      "name": "AI Logic",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "responseBody": "={{ {\"response\": $json.aiResponse} }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              },
+              {
+                "name": "Access-Control-Allow-Methods", 
+                "value": "POST, OPTIONS"
+              },
+              {
+                "name": "Access-Control-Allow-Headers",
+                "value": "Content-Type"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "id": "respond-webhook",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [680, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Logic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Logic": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {},
+  "versionId": "1",
+  "id": "tomo-chat-workflow"
+}
