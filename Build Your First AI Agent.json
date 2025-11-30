@@ -1,0 +1,512 @@
+{
+  "name": "Build Your First AI Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Try It Out!\n\n**Launch your first AI agent—a chatbot that uses tools to fetch live info, send emails, and automate tasks.**\n\n### To get started:\n1.  **Connect Gemini** (see red sticky note below)\n2.  Click the **🗨 Open chat** button and try asking:\n    *   “What’s the weather in Paris?”\n    *   “Get me the latest tech news.”\n    *   “Give me ideas for n8n AI agents.”\n\n### Questions or Feedback?\nFor feedback, coaching, buit-for-you workflows or any questions, use my unified AI-powered contact form.\n\n➡️ **[Get in Touch Here](https://api.ia2s.app/form/templates/academy)**\n\n*Happy Automating! —Lucas Peyrin*",
+        "height": 460,
+        "width": 392
+      },
+      "id": "3808de8d-ef18-47f5-9621-b08ba961ae01",
+      "cid": "Ikx1Y2FzIFBleXJpbiI",
+      "name": "Introduction Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "creator": "Lucas Peyrin",
+      "position": [
+        32,
+        3568
+      ],
+      "typeVersion": 1,
+      "notes": "© 2025 Lucas Peyrin"
+    },
+    {
+      "parameters": {
+        "content": "💡 Later, activate this workflow and share the public chat URL to let others talk to your AI Agent!",
+        "height": 252,
+        "width": 300,
+        "color": 7
+      },
+      "id": "2b55763c-0541-4133-aa79-87c3ce9f0564",
+      "cid": "Ikx1Y2FzIFBleXJpbiI",
+      "name": "Sticky Note12",
+      "type": "n8n-nodes-base.stickyNote",
+      "creator": "Lucas Peyrin",
+      "position": [
+        512,
+        3040
+      ],
+      "typeVersion": 1,
+      "notes": "© 2025 Lucas Peyrin"
+    },
+    {
+      "parameters": {
+        "content": "Your AI agent can:\n1. **Receive** messages from the chat\n2. **Select** the right tools (e.g., weather, news, email)\n3. **Respond** with live, helpful answers\n\n\n**Open the AI agent node** and edit the **System Message** to adjust your agent’s thinking, behavior, and replies.\n\n\n\n\n\n\n\n\n\n\n",
+        "height": 348,
+        "width": 396,
+        "color": 7
+      },
+      "id": "f09c396a-dab8-41f8-a6e5-3dbd1dd70323",
+      "cid": "Ikx1Y2FzIFBleXJpbiI",
+      "name": "Sticky Note13",
+      "type": "n8n-nodes-base.stickyNote",
+      "creator": "Lucas Peyrin",
+      "position": [
+        928,
+        2944
+      ],
+      "typeVersion": 1,
+      "notes": "© 2025 Lucas Peyrin"
+    },
+    {
+      "parameters": {
+        "content": "\n\n\n\n\n\n\n\n\n\n\n\n\n\nThis node helps your agent remember the last few messages to stay on topic.",
+        "height": 260,
+        "width": 308,
+        "color": 7
+      },
+      "id": "f7c57d33-2318-409d-9084-13990299db3d",
+      "cid": "Ikx1Y2FzIFBleXJpbiI",
+      "name": "Sticky Note15",
+      "type": "n8n-nodes-base.stickyNote",
+      "creator": "Lucas Peyrin",
+      "position": [
+        848,
+        3232
+      ],
+      "typeVersion": 1,
+      "notes": "© 2025 Lucas Peyrin"
+    },
+    {
+      "parameters": {
+        "content": "\n\n\n\n\n\n\n\n\n\n\n\n\nThese tools let your agent access real-world data or take actions. Add more to expand its abilities!\n\nClick the ➕ under the agent’s Tool input to add:\n- Google Calendar (Get Upcoming Events)\n- Gmail (Send an Email) (Gmail)",
+        "height": 324,
+        "width": 372,
+        "color": 7
+      },
+      "id": "07ed7ed3-91d0-432f-9327-d2a30601082c",
+      "cid": "Ikx1Y2FzIFBleXJpbiI",
+      "name": "Sticky Note16",
+      "type": "n8n-nodes-base.stickyNote",
+      "creator": "Lucas Peyrin",
+      "position": [
+        1072,
+        3168
+      ],
+      "typeVersion": 1,
+      "notes": "© 2025 Lucas Peyrin"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Gets the latest blog posts about any rss feed.",
+        "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', `Use one of:\n- https://feeds.bbci.co.uk/news/world/rss.xml (BBC World – global headlines)\n- https://www.aljazeera.com/xml/rss/all.xml (Al Jazeera English – in‑depth global coverage)\n- http://rss.cnn.com/rss/edition_world.rss (CNN World – breaking news worldwide)\n- https://techcrunch.com/feed/ (TechCrunch – global tech & startup news)\n- http://news.ycombinator.com/rss (Hacker News – tech community headlines)\n- https://n8n.io/blog/rss (n8n Blog – updates & tutorials)\n- https://www.bonappetit.com/feed/recipes-rss-feed/rss (Bon Appétit – recent recipes list)\n- https://www.endsreport.com/rss/news-and-analysis (ENDS Report – environmental law & policy news)\n- https://medlineplus.gov/groupfeeds/new.xml (MedlinePlus – health topics & wellness updates)`, 'string') }}",
+        "options": {}
+      },
+      "id": "24fc1fd5-ed10-43d9-9b35-8facb7f357d5",
+      "cid": "Ikx1Y2FzIFBleXJpbiI",
+      "name": "Get News",
+      "type": "n8n-nodes-base.rssFeedReadTool",
+      "creator": "Lucas Peyrin",
+      "position": [
+        1312,
+        2480
+      ],
+      "typeVersion": 1.2,
+      "notes": "© 2025 Lucas Peyrin"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Get weather forecast anywhere, anytime. You can make requests by assuming most information, the only thing you need is the location (use the city name to infer lat and long automatically) and time period (assume today if not specified)",
+        "url": "https://api.open-meteo.com/v1/forecast",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "latitude",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Latitude of the location, e.g. 45.75 for Lyon. Do not ask the user just infer it automatically.`, 'string') }}"
+            },
+            {
+              "name": "longitude",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `Longitude of the location, e.g. 4.85 for Lyon. Do not ask the user just infer it automatically.`, 'string') }}"
+            },
+            {
+              "name": "current",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters2_Value', `Comma-separated list of current weather variables (no whitespace).\n\nExample: temperature_2m,windspeed_10m,rain.\n\nOptions: temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,rain,showers,snowfall,weathercode,cloudcover_total,pressure_msl,surface_pressure,windspeed_10m,winddirection_10m,windgusts_10m.`, 'string') }}"
+            },
+            {
+              "name": "hourly",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters3_Value', `Comma-separated list of hourly weather variables (no whitespace). Hourly is only useful to get one day's information. For weakly overview please use daily.\n\nExample: temperature_2m,precipitation.\n\nOptions: temperature_2m,relative_humidity_2m,dewpoint_2m,apparent_temperature,precipitation,rain,showers,snowfall,snow_depth,pressure_msl,surface_pressure,cloudcover_total,cloudcover_low,cloudcover_mid,cloudcover_high,windspeed_10m,winddirection_10m,windgusts_10m,visibility,is_day,sunshine_duration,soil_temperature,soil_moisture,PM10,PM2_5,carbon_monoxide,ozone,us_aqi,UV_index.`, 'string') }}"
+            },
+            {
+              "name": "daily",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters4_Value', `Comma-separated list of daily weather variables (no whitespace).\n\nExample: temperature_2m_max,precipitation_sum.\n\nOptions: weathercode,temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,precipitation_sum,rain_sum,showers_sum,snowfall_sum,precipitation_hours,sunrise,sunset,daylight_duration,sunshine_duration,pressure_msl_max,pressure_msl_min,surface_pressure_max,surface_pressure_min,windgusts_10m_max,windspeed_10m_max,winddirection_10m_dominant,shortwave_radiation_sum.`, 'string') }}"
+            },
+            {
+              "name": "start_date",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters5_Value', `Start date in YYYY-MM-DD format. Example: 2025-07-15`, 'string') }}"
+            },
+            {
+              "name": "end_date",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters6_Value', `End date in YYYY-MM-DD format. Must be after start_date. Example: 2025-07-18`, 'string') }}"
+            },
+            {
+              "name": "temperature_unit",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters7_Value', `Unit for temperature. Options: celsius (default), fahrenheit.`, 'string') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ac7d0dd1-8885-41c1-abda-f3742c838992",
+      "cid": "Ikx1Y2FzIFBleXJpbiI",
+      "name": "Get Weather",
+      "type": "n8n-nodes-base.httpRequestTool",
+      "creator": "Lucas Peyrin",
+      "position": [
+        1440,
+        2480
+      ],
+      "notesInFlow": true,
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "text": "={{ $json.body.message }}",
+        "options": {
+          "systemMessage": "=<role>\nYou are Tomo by TOMO Academy — an advanced AI assistant. You are professional, creative, enthusiastic about helping users, and deliver beautifully formatted responses.\n</role>\n\n<instructions>\n<goal>\nAct as an intelligent AI assistant. \nInteract naturally with users, answer questions, and use your tools (Gmail, Weather, News, etc.) when needed.\n</goal>\n\n<context>\n### How You Work\nYou are powered by TOMO Academy's AI platform with:\n1. A set of tools you can call (Gmail, Weather, News…)\n2. Simple conversation memory\n\n### Core Behavior\nYou must use a tool whenever the user request matches a tool's capability.\n\n### Email Assistant Mode (IMPORTANT)\nWhenever the user asks to **\"send email\"**, you MUST output ONLY these 3 fields:\n\n1. to: (a valid full email address)\n2. subject: (short subject line)\n3. message: (full email body)\n\nEmail Rules:\n- Email address MUST contain \"@\" and a full domain such as .com, .net, .org, .in, etc.\n- Never produce incomplete emails like \"gmail\", \"gmail.\", \"example@\".\n- If the user gives only a name, convert it into a safe placeholder:  \n  name@example.com\n- Output NOTHING except these 3 fields.  \n  No greetings, no explanations, no formatting outside the 3 fields.\n\n### Email Content Formatting\nWhen creating email content, generate professional HTML-styled emails with proper formatting, colors, headings, and structure. Use inline CSS for styling. Make emails visually appealing with headers, body sections, and footers. IMPORTANT: Always sign emails as 'Tomo by TOMO Academy' and include footer text '© 2025 TOMO Academy. Powered by AI.' Never mention n8n or any other platform in email signatures or footers.\n\n### Current Date & Time\n{{ $now }}\n</context>\n\n<output_format>\nAlways format your responses with rich styling using emojis, bullet points, headings, and clear structure. Make responses visually engaging and easy to read. Use emojis strategically to enhance communication. When sending emails, create stunning HTML designs with modern styling, gradients, professional layouts, and TOMO Academy branding in the footer.\n</output_format>\n</instructions>\n"
+        }
+      },
+      "id": "332af12a-45ab-4e5d-8dab-da21ba2111f9",
+      "cid": "Ikx1Y2FzIFBleXJpbiI",
+      "name": "Your First AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "creator": "Lucas Peyrin",
+      "position": [
+        1240,
+        2256
+      ],
+      "typeVersion": 2.2,
+      "notes": "© 2025 Lucas Peyrin"
+    },
+    {
+      "parameters": {
+        "sessionKey": "={{ $json.body.sessionId }}",
+        "contextWindowLength": 30
+      },
+      "id": "56d2684a-7f83-4ffd-8501-3253d999b4c6",
+      "cid": "Ikx1Y2FzIFBleXJpbiI",
+      "name": "Conversation Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "creator": "Lucas Peyrin",
+      "position": [
+        1184,
+        2480
+      ],
+      "typeVersion": 1.3,
+      "notes": "© 2025 Lucas Peyrin"
+    },
+    {
+      "parameters": {
+        "options": {
+          "temperature": 0
+        }
+      },
+      "id": "c218a5da-bec7-4034-8d2b-f4bca34e551e",
+      "cid": "Ikx1Y2FzIFBleXJpbiI",
+      "name": "Connect Gemini",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "creator": "Lucas Peyrin",
+      "position": [
+        1056,
+        2480
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "dbyp2tWCCFGVNvh4",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      },
+      "notes": "© 2025 Lucas Peyrin"
+    },
+    {
+      "parameters": {
+        "content": "\n\n\n\n\n\n\n\n\n\n\n\n1. [In Google AI Studio](https://aistudio.google.com/app/apikey) click **“Create API key in new project”** and copy it.\n\n2. Open the ```Connect Gemini``` node:\n   * **Select Credential → Create New**\n   * Paste into **API Key** and **Save**\n",
+        "height": 316,
+        "width": 294,
+        "color": 3
+      },
+      "id": "199eb2cd-bc6b-4f61-bbf1-f196c7869b43",
+      "cid": "Ikx1Y2FzIFBleXJpbiI",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "creator": "Lucas Peyrin",
+      "position": [
+        720,
+        3184
+      ],
+      "typeVersion": 1,
+      "notes": "© 2025 Lucas Peyrin"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('To', ``, 'string') }}",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        1568,
+        2480
+      ],
+      "id": "744aec26-fd37-4c01-949d-ae74f5975c9f",
+      "name": "Send a message in Gmail",
+      "webhookId": "f69225c1-6839-4631-93dd-9e8f5b9e7bff",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "NbGne7qRRsazqPeh",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.resend.com/emails",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer re_FRhtFytP_My8bS4N6usCsos6g2e5Ubtwa"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"from\": \"Tomo Academy <noreply@tomoacademy.site>\",\n  \"to\": [\n    \"{{ $json.to }}\"\n  ],\n  \"subject\": \"{{ $json.subject }}\",\n  \"html\": \"{{ $json.message }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        2000,
+        2352
+      ],
+      "id": "6e3c66b4-49ff-444e-9f95-3e2827ef51a3",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "id-1",
+              "leftValue": "={{ $json.to }}",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            },
+            {
+              "id": "id-2",
+              "leftValue": "={{ $json.subject }}",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            },
+            {
+              "id": "id-3",
+              "leftValue": "={{ $json.message }}",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "ca72366a-1ab1-47ad-b266-d6c4ea92b823",
+      "name": "Check if Email Data Exists",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1776,
+        2352
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "tomo-chat",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "e0446ea9-fd7d-4876-a3c7-4e52d8a3d13e",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        832,
+        2256
+      ],
+      "webhookId": "ee9ea71f-5e01-4978-950c-813a2e540032"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"response\": \"={{ $('Your First AI Agent').item.json.output }}\"\n}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              },
+              {
+                "name": "Access-Control-Allow-Methods",
+                "value": "POST, OPTIONS"
+              },
+              {
+                "name": "Access-Control-Allow-Headers",
+                "value": "Content-Type"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "id": "2bcc60d2-f069-4ed4-8896-a402c9de38f6",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1776,
+        2160
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Get News": {
+      "ai_tool": [
+        [
+          {
+            "node": "Your First AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Weather": {
+      "ai_tool": [
+        [
+          {
+            "node": "Your First AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Connect Gemini": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Your First AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Conversation Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Your First AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message in Gmail": {
+      "ai_tool": [
+        [
+          {
+            "node": "Your First AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Your First AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Check if Email Data Exists",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check if Email Data Exists": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Your First AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "executionTimeout": -1,
+    "availableInMCP": false
+  },
+  "versionId": "5d22ca02-b9cd-4abe-b3ab-bce99e149970",
+  "meta": {
+    "templateId": "6270",
+    "templateCredsSetupCompleted": true,
+    "instanceId": "7c7743a97cd2552c36c35e4f15099955587aa38b015972cdec1ed26b180aedd5"
+  },
+  "id": "j28I4xcor9UFAcax",
+  "tags": []
+}
