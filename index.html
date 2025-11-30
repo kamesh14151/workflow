@@ -530,7 +530,7 @@
 
     <script>
         // Configuration
-        const WEBHOOK_URL = 'https://kamesh14151.app.n8n.cloud/webhook/tomo-chat';
+        const WEBHOOK_URL = 'https://kamesh14151.app.n8n.cloud/webhook-test/tomo-chat';
         
         // Session management
         let sessionId = localStorage.getItem('tomoSessionId');
@@ -580,7 +580,8 @@
                 });
                 
                 if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
+                    const errorMsg = `HTTP error! Status: ${response.status}`;
+                    throw new Error(errorMsg);
                 }
                 
                 const data = await response.json();
@@ -590,8 +591,14 @@
                 console.error('Error sending message to webhook:', error);
                 updateConnectionStatus('disconnected');
                 
-                // Check if it's a CORS error
-                if (error.message.includes('fetch') || error.name === 'TypeError') {
+                // Specific error messages based on error type
+                if (error.message.includes('Status: 500')) {
+                    return "🔧 n8n Workflow Error: Please check your n8n execution logs. Your workflow may have an internal error (missing API keys, wrong configuration, etc.)";
+                } else if (error.message.includes('Status: 404')) {
+                    return "🔍 Webhook Not Found: Please verify your n8n workflow is active and the webhook URL is correct.";
+                } else if (error.message.includes('Status: 403')) {
+                    return "🚫 Access Denied: Please check your n8n workflow permissions and CORS settings.";
+                } else if (error.message.includes('fetch') || error.name === 'TypeError') {
                     return "❌ CORS Error: Please configure CORS headers in your n8n workflow. Check the setup guide for details.";
                 }
                 
