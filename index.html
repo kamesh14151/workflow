@@ -530,7 +530,7 @@
 
     <script>
         // Configuration
-        const WEBHOOK_URL = 'https://kamesh14151.app.n8n.cloud/webhook/chat';
+        const WEBHOOK_URL = 'https://sanju14151.app.n8n.cloud/webhook/70551e0c-8eff-434d-8c1a-e4107e5e8a43/chat';
         
         // Session management
         let sessionId = localStorage.getItem('tomoSessionId');
@@ -568,7 +568,7 @@
             
             try {
                 console.log('Sending to:', WEBHOOK_URL);
-                console.log('Payload:', { message: message, sessionId: sessionId });
+                console.log('Payload:', { action: 'sendMessage', sessionId: sessionId, chatInput: message });
                 
                 const response = await fetch(WEBHOOK_URL, {
                     method: 'POST',
@@ -577,8 +577,9 @@
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        message: message,
-                        sessionId: sessionId
+                        action: 'sendMessage',
+                        sessionId: sessionId,
+                        chatInput: message
                     })
                 });
                 
@@ -614,7 +615,7 @@
                 }
                 
                 updateConnectionStatus('connected');
-                return data.response || data.message || data.output || "I'm sorry, I couldn't process your request right now.";
+                return data.output || data.response || data.message || "I'm sorry, I couldn't process your request right now.";
             } catch (error) {
                 console.error('Full error details:', error);
                 updateConnectionStatus('disconnected');
