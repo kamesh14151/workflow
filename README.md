@@ -86,21 +86,141 @@ You can deploy the `index.html` file to any hosting service:
 
 ## 🔧 Integration with Custom Apps
 
-If you want to integrate this chat into your existing Vercel app or any other application, use this code:
+### Vercel App Integration
+
+If you want to integrate Tomo into your existing Vercel app, here's the complete implementation:
 
 ```javascript
-// Example fetch request from your app
-const response = await fetch('https://kamesh14151.app.n8n.cloud/webhook/tomo-chat', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    message: userMessage,
-    sessionId: uniqueSessionId // e.g., user ID or UUID
-  })
-});
+// In your chat component or API route
+const sendMessage = async (userMessage) => {
+  const response = await fetch('https://kamesh14151.app.n8n.cloud/webhook/tomo-chat', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      message: userMessage,
+      sessionId: generateSessionId() // Use user ID or generate UUID
+    })
+  });
+  
+  const data = await response.json();
+  return data.response; // This is Tomo's reply
+};
 
-const data = await response.json();
-console.log(data.response); // AI's response
+// Generate or retrieve session ID
+function generateSessionId() {
+  // Option 1: Use existing user ID
+  // return userId;
+  
+  // Option 2: Generate and store in localStorage
+  let sessionId = localStorage.getItem('tomoSessionId');
+  if (!sessionId) {
+    sessionId = crypto.randomUUID();
+    localStorage.setItem('tomoSessionId', sessionId);
+  }
+  return sessionId;
+}
+```
+
+### React Component Example
+
+```jsx
+import { useState, useEffect } from 'react';
+
+export default function ChatComponent() {
+  const [messages, setMessages] = useState([]);
+  const [input, setInput] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const sendMessage = async (userMessage) => {
+    setLoading(true);
+    try {
+      const response = await fetch('https://kamesh14151.app.n8n.cloud/webhook/tomo-chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: userMessage,
+          sessionId: generateSessionId()
+        })
+      });
+      
+      const data = await response.json();
+      return data.response;
+    } catch (error) {
+      console.error('Chat error:', error);
+      return "Sorry, I'm having trouble connecting right now.";
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!input.trim()) return;
+
+    const userMessage = input.trim();
+    setInput('');
+    
+    // Add user message
+    setMessages(prev => [...prev, { text: userMessage, sender: 'user' }]);
+    
+    // Get AI response
+    const aiResponse = await sendMessage(userMessage);
+    setMessages(prev => [...prev, { text: aiResponse, sender: 'ai' }]);
+  };
+
+  return (
+    <div className="chat-container">
+      <div className="messages">
+        {messages.map((msg, index) => (
+          <div key={index} className={`message ${msg.sender}`}>
+            {msg.text}
+          </div>
+        ))}
+        {loading && <div className="typing">Tomo is typing...</div>}
+      </div>
+      
+      <form onSubmit={handleSubmit}>
+        <input
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="Type your message..."
+          disabled={loading}
+        />
+        <button type="submit" disabled={loading || !input.trim()}>
+          Send
+        </button>
+      </form>
+    </div>
+  );
+}
+```
+
+### API Route Example (Next.js)
+
+```javascript
+// pages/api/chat.js or app/api/chat/route.js
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  const { message, sessionId } = req.body;
+
+  try {
+    const response = await fetch('https://kamesh14151.app.n8n.cloud/webhook/tomo-chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message, sessionId })
+    });
+
+    const data = await response.json();
+    res.status(200).json({ response: data.response });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to get AI response' });
+  }
+}
 ```
 
 ## 💾 Session Management
@@ -225,14 +345,56 @@ The chat interface is fully responsive and works great on:
 - Implement rate limiting in your n8n workflow
 - Consider adding authentication for sensitive use cases
 
-## 🎯 Next Steps
+## 🚀 Deployment & Testing
 
-1. **Deploy** your chat interface
-2. **Test** the connection with your n8n workflow
-3. **Customize** the appearance and messages
-4. **Share** your chat with users
-5. **Monitor** usage and improve the experience
+### Deploy to Vercel
+
+1. **Push your code** to GitHub repository
+2. **Connect to Vercel**:
+   - Go to [vercel.com](https://vercel.com)
+   - Import your GitHub repository
+   - Deploy automatically
+
+3. **Redeploy** after updating the code:
+   ```bash
+   git add .
+   git commit -m "Update chat integration"
+   git push origin main
+   ```
+
+### Test Your Integration
+
+1. **Visit your deployed app**: `https://your-app.vercel.app`
+2. **Send a test message** in the chat
+3. **Verify Tomo responds** with styled, emoji-rich responses
+4. **Check conversation memory** by referencing previous messages
+
+### Live Demo
+
+🌐 **Working Example**: https://workflow-one-gamma.vercel.app/
+- Send a message to see Tomo in action
+- Test conversation memory with follow-up questions
+- Try the dark/light mode toggle
+
+## ✅ Important Testing Notes
+
+- ✅ **Session ID**: Enables conversation memory - use the same ID for entire conversations
+- ✅ **Active Workflow**: Make sure your n8n workflow is **ACTIVE** before testing  
+- ✅ **Execution Logs**: Check n8n execution logs if messages aren't working
+- ✅ **CORS Headers**: Ensure proper CORS configuration (see troubleshooting section)
+- ✅ **Response Format**: n8n should return `{"response": "AI message text"}`
+
+## 🚀 Next Steps
+
+1. **Deploy** your chat interface to Vercel
+2. **Configure** your n8n workflow with proper CORS headers
+3. **Test** the integration thoroughly
+4. **Customize** the appearance and AI responses
+5. **Share** your chat with users
+6. **Monitor** n8n execution logs and optimize performance
 
 ---
 
 **Enjoy your new AI chat assistant! 🤖✨**
+
+*Need help? Check the troubleshooting section or create an issue in the repository.*
