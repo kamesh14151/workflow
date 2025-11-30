@@ -485,7 +485,7 @@
                 <div class="avatar bot">T</div>
                 <div class="message-content">
                     <div class="message-bubble">
-                        Hi! I'm Tomo, your AI assistant. How can I help you today? 🚀
+                        Hi! I'm Tomo, your AI email assistant. I can help you compose, send, and manage emails. Try saying "Send a thank you email to [email]" or "Help me write a professional email." 📧✨
                     </div>
                     <div class="message-time">Just now</div>
                 </div>
@@ -520,10 +520,10 @@
                 </div>
             </div>
             <div class="quick-replies">
-                <button class="quick-reply" onclick="quickReply('Hello!')">Hello!</button>
-                <button class="quick-reply" onclick="quickReply('What can you do?')">What can you do?</button>
-                <button class="quick-reply" onclick="quickReply('Help me')">Help me</button>
-                <button class="quick-reply" onclick="quickReply('Tell me a joke')">Tell me a joke</button>
+                <button class="quick-reply" onclick="quickReply('What can you help me with?')">What can you do?</button>
+                <button class="quick-reply" onclick="quickReply('Send a thank you email')">Send thank you email</button>
+                <button class="quick-reply" onclick="quickReply('Write a professional email')">Professional email</button>
+                <button class="quick-reply" onclick="quickReply('Help me compose an email')">Compose email</button>
             </div>
         </div>
     </div>
@@ -568,7 +568,7 @@
             
             try {
                 console.log('Sending to:', WEBHOOK_URL);
-                console.log('Payload:', { action: 'sendMessage', sessionId: sessionId, chatInput: message });
+                console.log('Payload:', { chatInput: message, sessionId: sessionId, action: 'sendMessage' });
                 
                 const response = await fetch(WEBHOOK_URL, {
                     method: 'POST',
@@ -577,9 +577,9 @@
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        action: 'sendMessage',
+                        chatInput: message,
                         sessionId: sessionId,
-                        chatInput: message
+                        action: 'sendMessage'
                     })
                 });
                 
@@ -587,7 +587,14 @@
                 console.log('Response headers:', [...response.headers.entries()]);
                 
                 if (!response.ok) {
-                    const errorMsg = `HTTP error! Status: ${response.status}`;
+                    let errorMsg = `HTTP error! Status: ${response.status}`;
+                    try {
+                        const errorData = await response.json();
+                        errorMsg = errorData.errorMessage || errorData.error || errorMsg;
+                        console.error('n8n workflow error:', errorData);
+                    } catch (e) {
+                        // If we can't parse error response, use status message
+                    }
                     throw new Error(errorMsg);
                 }
                 
@@ -615,16 +622,29 @@
                 }
                 
                 updateConnectionStatus('connected');
-                return data.output || data.response || data.message || "I'm sorry, I couldn't process your request right now.";
+                
+                // Handle successful response
+                if (data.output) {
+                    return data.output;
+                } else if (data.message) {
+                    return data.message;
+                } else if (data.response) {
+                    return data.response;
+                } else {
+                    console.warn('Unexpected response format:', data);
+                    return "I received your message but got an unexpected response format. Please try again.";
+                }
             } catch (error) {
                 console.error('Full error details:', error);
                 updateConnectionStatus('disconnected');
                 
                 // Specific error messages based on error type
                 if (error.message.includes('Status: 500')) {
-                    return "🔧 n8n Workflow Error: Internal server error. Check your n8n execution logs - likely an AI Agent configuration issue or missing API keys.";
+                    return "🔧 n8n Workflow Error: The workflow encountered an internal error. Check your n8n execution logs for details.";
+                } else if (error.message.includes('Status: 400')) {
+                    return "⚠️ Bad Request: The message format may be invalid. Please try again with a different message.";
                 } else if (error.message.includes('Status: 404')) {
-                    return "🔍 Webhook Not Found: Verify your n8n workflow is ACTIVE and the webhook URL path is '/chat'.";
+                    return "🔍 Webhook Not Found: Verify your n8n workflow is ACTIVE and the webhook URL is correct.";
                 } else if (error.message.includes('Status: 403')) {
                     return "🚫 Access Denied: Check your n8n workflow permissions and CORS settings.";
                 } else if (error.name === 'TypeError' && error.message.includes('fetch')) {
