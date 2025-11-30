@@ -298,7 +298,47 @@ The interface automatically handles:
 
 ### Common Issues
 
-1. **CORS Error (Most Common)**
+1. **HTTP 500 Internal Server Error**
+   ```
+   Failed to load resource: the server responded with a status of 500
+   Error: HTTP error! Status: 500
+   ```
+   **This means your n8n workflow has an internal error:**
+   - ✅ CORS is working (request reaches n8n)
+   - ❌ Something is wrong inside your workflow
+   
+   **Debug Steps**:
+   1. **Check n8n Execution Logs**:
+      - Go to your n8n dashboard
+      - Check "Executions" tab for failed runs
+      - Look for error messages in red
+   
+   2. **Common n8n Workflow Issues**:
+      - Missing or incorrect AI API keys
+      - Wrong node configuration
+      - Invalid JSON in response body
+      - Missing required fields in webhook data
+   
+   3. **Test Your Workflow**:
+      - In n8n, click "Test Workflow" 
+      - Send a manual test with this data:
+        ```json
+        {
+          "message": "Hello",
+          "sessionId": "test-session"
+        }
+        ```
+
+   4. **"Unused Respond to Webhook node" Error**:
+      ```json
+      {"code": 0, "message": "Unused Respond to Webhook node found in the workflow"}
+      ```
+      **Fix**: Connect all nodes in your workflow properly:
+      - Ensure Webhook → AI Logic → Respond to Webhook are connected
+      - The "Respond to Webhook" node must be the FINAL node
+      - No orphaned/disconnected nodes should exist
+
+2. **CORS Error (If still occurring)**
    ```
    Access to fetch at 'webhook-url' has been blocked by CORS policy
    ```
@@ -312,21 +352,47 @@ The interface automatically handles:
        "Access-Control-Allow-Headers": "Content-Type"
      }
      ```
-   - Or use the HTTP Request node instead of Webhook for better CORS control
 
-2. **"Disconnected" status**
+3. **"Disconnected" status**
    - Check if n8n workflow is activated
    - Verify webhook URL is correct
    - Check n8n instance is running
 
-3. **Messages not sending**
+4. **Messages not sending**
    - Open browser console for error messages
-   - Verify CORS settings in n8n (see #1 above)
-   - Check network connectivity
+   - Check n8n execution logs for workflow errors
+   - Verify all API keys are configured correctly
 
-4. **Session not persisting**
+5. **Session not persisting**
    - Ensure localStorage is enabled in browser
    - Check if cookies/storage are being cleared
+
+### 🔍 Quick n8n Debugging Checklist
+
+**Step 1: Check Workflow Status**
+- ✅ Is your workflow **ACTIVE** in n8n?
+- ✅ Does the webhook path match: `/webhook/tomo-chat`?
+
+**Step 2: Test Webhook Manually**
+```bash
+curl -X POST https://kamesh14151.app.n8n.cloud/webhook/tomo-chat \
+  -H "Content-Type: application/json" \
+  -d '{"message": "test", "sessionId": "test-123"}'
+```
+
+**Step 3: Check Response Format**
+Your n8n workflow MUST return exactly this format:
+```json
+{
+  "response": "Your AI response text here"
+}
+```
+
+**Step 4: Common n8n Fixes**
+- **Missing AI API Key**: Add your OpenAI/Claude/etc. API key
+- **Wrong Response Body**: Use `{{ {"response": $json.aiResponse} }}`
+- **Node Errors**: Check each node for red error indicators
+- **Timeout Issues**: Increase workflow timeout settings
 
 ### Testing the Connection
 The chat interface automatically tests the connection on page load. Check the connection status indicator in the top-right corner.
